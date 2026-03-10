@@ -1,0 +1,39 @@
+#include <iostream>
+#include <deque>
+using namespace std;
+
+int main() {
+    deque<int> dq;
+
+    // push_back
+    dq.push_back(10);
+    dq.push_back(20);
+
+    // push_front
+    dq.push_front(5);
+
+    // Display front and back
+    cout << "Front element: " << dq.front() << endl;  // 5
+    cout << "Back element: " << dq.back() << endl;    // 20
+
+    // pop_front
+    dq.pop_front();  // removes 5
+
+    // pop_back
+    dq.pop_back();   // removes 20
+
+    // size
+    cout << "Size of deque: " << dq.size() << endl;   // 1
+
+    // check empty
+    if (dq.empty())
+        cout << "Deque is empty" << endl;
+    else
+        cout << "Deque is not empty" << endl;
+
+    // clear
+    dq.clear();
+    cout << "Size after clear: " << dq.size() << endl;
+
+    return 0;
+}
