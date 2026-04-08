@@ -1,0 +1,93 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+
+// Adjacency list node
+struct Node {
+    int vertex;
+    struct Node* next;
+};
+
+// Graph structure
+struct Graph {
+    int V;
+    struct Node** adj;
+};
+
+// Create a new node
+struct Node* createNode(int v) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->vertex = v;
+    newNode->next = NULL;
+    return newNode;
+}
+
+// Create graph
+struct Graph* createGraph(int V) {
+    struct Graph* graph = (struct Graph*)malloc(sizeof(struct Graph));
+    graph->V = V;
+    graph->adj = (struct Node**)malloc(V * sizeof(struct Node*));
+    for (int i = 0; i < V; i++)
+        graph->adj[i] = NULL;
+    return graph;
+}
+
+// Add edge u -> v
+void addEdge(struct Graph* graph, int u, int v) {
+    struct Node* newNode = createNode(v);
+    newNode->next = graph->adj[u];
+    graph->adj[u] = newNode;
+}
+
+// DFS utility
+void DFS(int v, bool visited[], int stack[], int* top, struct Graph* graph) {
+    visited[v] = true;
+
+    struct Node* temp = graph->adj[v];
+    while (temp) {
+        if (!visited[temp->vertex])
+            DFS(temp->vertex, visited, stack, top, graph);
+        temp = temp->next;
+    }
+
+    // Push to stack
+    stack[(*top)++] = v;
+}
+
+// Topological Sort
+void topologicalSort(struct Graph* graph) {
+    int V = graph->V;
+    bool visited[V];
+    for (int i = 0; i < V; i++)
+        visited[i] = false;
+
+    int stack[V];
+    int top = 0;
+
+    for (int i = 0; i < V; i++) {
+        if (!visited[i])
+            DFS(i, visited, stack, &top, graph);
+    }
+
+    printf("Topological Ordering:\n");
+    for (int i = top - 1; i >= 0; i--)
+        printf("%d ", stack[i]);
+    printf("\n");
+}
+
+// Driver code
+int main() {
+    int V = 6;
+    struct Graph* graph = createGraph(V);
+
+    addEdge(graph, 5, 2);
+    addEdge(graph, 5, 0);
+    addEdge(graph, 4, 0);
+    addEdge(graph, 4, 1);
+    addEdge(graph, 2, 3);
+    addEdge(graph, 3, 1);
+
+    topologicalSort(graph);
+
+    return 0;
+}
