@@ -1,0 +1,65 @@
+#include <stdio.h>
+
+#define MAX 100
+
+int adj[MAX][MAX];
+int visited[MAX];
+
+int queue[MAX], front = 0, rear = 0;
+
+void enqueue(int x) {
+    queue[rear++] = x;
+}
+
+int dequeue() {
+    return queue[front++];
+}
+
+int main() {
+    int n, m;
+    scanf("%d %d", &n, &m);
+
+    int u, v;
+
+    // Initialize adjacency matrix
+    for (int i = 1; i <= n; i++) {
+        for (int j = 1; j <= n; j++) {
+            adj[i][j] = 0;
+        }
+        visited[i] = 0;
+    }
+
+    // Input edges (undirected graph)
+    for (int i = 0; i < m; i++) {
+        scanf("%d %d", &u, &v);
+        adj[u][v] = 1;
+        adj[v][u] = 1;
+    }
+
+    // BFS from node 1
+    enqueue(1);
+    visited[1] = 1;
+
+    while (front < rear) {
+        int node = dequeue();
+
+        for (int i = 1; i <= n; i++) {
+            if (adj[node][i] == 1 && !visited[i]) {
+                enqueue(i);
+                visited[i] = 1;
+            }
+        }
+    }
+
+    // Check if all nodes visited
+    for (int i = 1; i <= n; i++) {
+        if (!visited[i]) {
+            printf("NOT CONNECTED\n");
+            return 0;
+        }
+    }
+
+    printf("CONNECTED\n");
+
+    return 0;
+}
